@@ -1,15 +1,14 @@
 import sys
-from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QWidget
-from PyQt5.QtGui import QPainter
-from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPainter, QColor
 from random import randint
+from ui import Ui_Form
 
 
-class Cyrcle(QWidget):
+class Circle(QWidget, Ui_Form):
     def __init__(self):
         super().__init__()
-        uic.loadUi('UI.ui', self)
+        self.setupUi(self)
         self.pushButton.clicked.connect(self.add_new_coord)
         self.yellows_cyrcles = []
 
@@ -17,24 +16,24 @@ class Cyrcle(QWidget):
         if self.yellows_cyrcles:
             qp = QPainter()
             qp.begin(self)
-            qp.setPen(Qt.yellow)
-            for x_y_r in self.yellows_cyrcles:
-                x, y, r = x_y_r
+            for x_y_r_c in self.yellows_cyrcles:
+                x, y, r, c = x_y_r_c
+                qp.setPen(c)
                 qp.drawEllipse(x, y, r, r)
             qp.end()
-
 
     def add_new_coord(self):
         x = randint(100, 500)
         y = randint(100, 300)
         r = randint(10, 100)
-        self.yellows_cyrcles.append((x, y, r))
+        c = QColor(randint(0, 255), randint(0, 255), randint(0, 255))
+        self.yellows_cyrcles.append((x, y, r, c))
         self.update()
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-ex = Cyrcle()
+ex = Circle()
 ex.move(600, 400)
 ex.show()
 sys.exit(app.exec_())
