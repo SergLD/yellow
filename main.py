@@ -1,7 +1,8 @@
 import sys
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QWidget
-from PyQt5.QtGui import QPainter, QColor
+from PyQt5.QtGui import QPainter
+from PyQt5.QtCore import Qt
 from random import randint
 
 
@@ -9,26 +10,26 @@ class Cyrcle(QWidget):
     def __init__(self):
         super().__init__()
         uic.loadUi('UI.ui', self)
-        self.qp = QPainter()
-        self.pushButton.clicked.connect(self.get_new_coord)
+        self.pushButton.clicked.connect(self.add_new_coord)
         self.yellows_cyrcles = []
-        self.qp.setPen(QColor(255, 255, 0))
 
     def paintEvent(self, QPaintEvent):
         if self.yellows_cyrcles:
-            self.qp.begin(self)
+            qp = QPainter()
+            qp.begin(self)
+            qp.setPen(Qt.yellow)
             for x_y_r in self.yellows_cyrcles:
                 x, y, r = x_y_r
-                self.qp.drawEllipse(x, y, r, r)
-            self.qp.end()
-            self.update()
+                qp.drawEllipse(x, y, r, r)
+            qp.end()
 
-    def get_new_coord(self):
+
+    def add_new_coord(self):
         x = randint(100, 500)
         y = randint(100, 300)
         r = randint(10, 100)
         self.yellows_cyrcles.append((x, y, r))
-
+        self.update()
 
 
 if __name__ == '__main__':
